@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 1 — AI & Data Science Camp</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --bg-card: #1A1A2E;
+    --bg-card2: #12121F;
+    --text: #F5F0E8;
+    --text-muted: #9B9B9B;
+    --red: #CC0000;
+    --red-glow: rgba(204,0,0,0.12);
+    --green: #00FF9C;
+    --green-dim: rgba(0,255,156,0.08);
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.18);
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  [data-theme="light"] {
+    --bg: #F5F0E8;
+    --bg-card: #FFFFFF;
+    --bg-card2: #ECECEC;
+    --text: #0D0D0D;
+    --text-muted: #666666;
+    --red: #CC0000;
+    --red-glow: rgba(204,0,0,0.07);
+    --green: #007A4D;
+    --green-dim: rgba(0,122,77,0.07);
+    --border: rgba(0,0,0,0.09);
+    --border-hover: rgba(0,0,0,0.18);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    transition: background 0.3s, color 0.3s;
+  }
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo {
+    width: 32px; height: 32px;
+    background: var(--red);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 13px; font-weight: 500;
+    color: #fff; flex-shrink: 0;
+  }
+  .nav-title { font-family: var(--font-display); font-size: 15px; font-weight: 600; color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+  .nav-day {
+    font-family: var(--font-mono); font-size: 12px;
+    padding: 5px 12px; border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--text-muted); text-decoration: none;
+    transition: all 0.2s; background: transparent; cursor: pointer;
+  }
+  .nav-day:hover { border-color: var(--border-hover); color: var(--text); }
+  .nav-day.active { border-color: var(--red); color: var(--red); }
+  .nav-day.disabled { opacity: 0.35; pointer-events: none; }
+  .theme-toggle {
+    width: 32px; height: 32px; border-radius: 6px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--text-muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: all 0.2s; margin-left: 8px;
+  }
+  .theme-toggle:hover { border-color: var(--border-hover); color: var(--text); }
+  .layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    padding-top: 56px;
+  }
+  .sidebar {
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    padding: 2rem 1.5rem;
+    background: var(--bg);
+  }
+  .sidebar-label {
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+  .schedule-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .sched-item {
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 8px 10px; border-radius: 6px;
+    cursor: pointer; transition: background 0.15s;
+    border: 1px solid transparent;
+    text-decoration: none;
+  }
+  .sched-item:hover { background: var(--bg-card); }
+  .sched-item.active { background: var(--red-glow); border-color: var(--red); }
+  .sched-item.locked { opacity: 0.4; cursor: default; pointer-events: none; }
+  .sched-time { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+  .sched-name { font-size: 12px; font-weight: 500; color: var(--text); }
+  .sched-item.active .sched-name { color: var(--red); }
+  .sched-lock { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+  .progress-bar-wrap {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .progress-label {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--text-muted); margin-bottom: 8px;
+    display: flex; justify-content: space-between;
+  }
+  .progress-track {
+    height: 3px; background: var(--border);
+    border-radius: 2px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; background: var(--green);
+    border-radius: 2px; transition: width 0.4s ease;
+    width: 0%;
+  }
+  .content { padding: 3rem 2.5rem 6rem; max-width: 780px; }
+  .day-hero {
+    margin-bottom: 3.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-eyebrow {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--red); letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .day-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700; line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 1rem;
+  }
+  .day-sub { font-size: 1rem; color: var(--text-muted); line-height: 1.6; max-width: 520px; }
+  .section-block {
+    margin-bottom: 3rem;
+    scroll-margin-top: 80px;
+  }
+  .section-block.locked {
+    position: relative;
+    pointer-events: none;
+  }
+  .section-block.locked > *:not(.lock-overlay) { filter: blur(3px); user-select: none; }
+  .lock-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    pointer-events: all;
+    z-index: 10;
+  }
+  .lock-badge {
+    background: var(--bg-card);
+    border: 1px solid var(--border-hover);
+    border-radius: 10px;
+    padding: 1.5rem 2rem;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .lock-icon { font-size: 1.5rem; }
+  .lock-text { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+  .block-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .block-num {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-muted); background: var(--bg-card2);
+    padding: 3px 8px; border-radius: 3px; flex-shrink: 0;
+  }
+  .block-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem; font-weight: 600;
+  }
+  .block-time {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--text-muted); margin-left: auto; flex-shrink: 0;
+  }
+  .block-divider {
+    height: 1px; background: var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    font-size: 14px; line-height: 1.65;
+    color: var(--text-muted);
+  }
+  .info-card strong { color: var(--text); font-weight: 500; }
+  .info-card p + p { margin-top: 0.75rem; }
+  .step-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .step-item {
+    display: flex; gap: 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    align-items: flex-start;
+  }
+  .step-num {
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--red); background: var(--red-glow);
+    padding: 2px 7px; border-radius: 3px;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-content { font-size: 14px; line-height: 1.6; color: var(--text-muted); }
+  .step-content strong { color: var(--text); font-weight: 500; }
+  .cmd-block {
+    background: var(--bg-card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  .cmd-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cmd-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+  .cmd-copy {
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--green); background: var(--green-dim);
+    border: 1px solid transparent;
+    border-radius: 3px; padding: 2px 8px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .cmd-copy:hover { border-color: var(--green); }
+  .cmd-copy.copied { color: var(--text-muted); }
+  .cmd-body {
+    padding: 1rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 13px; line-height: 1.7;
+    color: var(--text);
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .cmd-comment { color: var(--text-muted); }
+  .callout {
+    border-left: 3px solid var(--green);
+    background: var(--green-dim);
+    border-radius: 0 6px 6px 0;
+    padding: 0.9rem 1.25rem;
+    font-size: 13px; line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+  .callout.warn {
+    border-left-color: var(--red);
+    background: var(--red-glow);
+  }
+  .callout strong { color: var(--text); font-weight: 500; }
+  .table-wrap { overflow-x: auto; margin-bottom: 1rem; }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-muted); text-align: left;
+    padding: 8px 12px; border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted); vertical-align: top;
+  }
+  td:first-child { color: var(--text); font-weight: 500; }
+  tr:last-child td { border-bottom: none; }
+  .unlock-form {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .unlock-form-title {
+    font-family: var(--font-display);
+    font-size: 1rem; font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .unlock-form-sub {
+    font-size: 13px; color: var(--text-muted);
+    margin-bottom: 1.25rem; line-height: 1.5;
+  }
+  .form-group { margin-bottom: 1rem; }
+  .form-label {
+    display: block; font-size: 13px; font-weight: 500;
+    margin-bottom: 6px; color: var(--text);
+  }
+  .form-input, .form-textarea {
+    width: 100%; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-family: var(--font-body);
+    font-size: 14px; padding: 10px 12px;
+    transition: border-color 0.2s; outline: none;
+    resize: vertical;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: var(--red); }
+  .form-textarea { min-height: 80px; }
+  .form-select {
+    width: 100%; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-family: var(--font-body);
+    font-size: 14px; padding: 10px 12px;
+    transition: border-color 0.2s; outline: none; cursor: pointer;
+  }
+  .form-select:focus { border-color: var(--red); }
+  .unlock-btn {
+    font-family: var(--font-display);
+    font-size: 14px; font-weight: 600;
+    padding: 10px 22px; background: var(--red);
+    color: #fff; border: none; border-radius: 6px;
+    cursor: pointer; transition: opacity 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .unlock-btn:hover { opacity: 0.85; }
+  .unlock-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .unlock-success {
+    display: none;
+    align-items: center; gap: 8px;
+    padding: 10px 14px;
+    background: var(--green-dim);
+    border: 1px solid var(--green);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 12px; color: var(--green);
+    margin-top: 12px;
+  }
+  .section-unlocked-banner {
+    display: none;
+    padding: 8px 14px;
+    background: var(--green-dim);
+    border: 1px solid var(--green);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--green);
+    margin-bottom: 1.5rem;
+    align-items: center; gap: 8px;
+  }
+  .checklist { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer; transition: border-color 0.15s;
+    font-size: 13px; color: var(--text-muted);
+  }
+  .check-item:hover { border-color: var(--border-hover); }
+  .check-item.checked {
+    border-color: var(--green);
+    background: var(--green-dim);
+    color: var(--text);
+  }
+  .check-box {
+    width: 16px; height: 16px;
+    border: 1px solid var(--border-hover);
+    border-radius: 3px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px; font-size: 10px; color: var(--green);
+    transition: all 0.15s;
+  }
+  .check-item.checked .check-box { background: var(--green); color: #000; border-color: var(--green); }
+  .tag {
+    display: inline-block; font-family: var(--font-mono);
+    font-size: 10px; padding: 2px 7px;
+    border-radius: 3px; margin-right: 4px; margin-bottom: 4px;
+  }
+  .tag-red { background: var(--red-glow); color: var(--red); }
+  .tag-green { background: var(--green-dim); color: var(--green); }
+  .tag-muted { background: var(--bg-card2); color: var(--text-muted); border: 1px solid var(--border); }
+  @media (max-width: 768px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .content { padding: 2rem 1.25rem 5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <div class="nav-logo">AI</div>
+    <span class="nav-title">Camp Command Center</span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-day active" href="day1.html">Day 1</a>
+    <span class="nav-day disabled">Day 2</span>
+    <span class="nav-day disabled">Day 3</span>
+    <span class="nav-day disabled">Day 4</span>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️</button>
+  </div>
+</nav>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-label">// Day 1 schedule</div>
+    <ul class="schedule-list" id="scheduleList">
+      <li><a class="sched-item active" href="#s0">
+        <span class="sched-time">9:00 – 9:35</span>
+        <span class="sched-name">Intro &amp; Icebreaker</span>
+      </a></li>
+      <li><a class="sched-item" href="#s1" id="nav-s1">
+        <span class="sched-time">9:35 – 10:30</span>
+        <span class="sched-name">AI &amp; Data Science</span>
+        <span class="sched-lock" id="lock-s1">🔒 locked</span>
+      </a></li>
+      <li><a class="sched-item" href="#s2" id="nav-s2">
+        <span class="sched-time">10:45 – 11:30</span>
+        <span class="sched-name">Pi 400 Setup</span>
+        <span class="sched-lock" id="lock-s2">🔒 locked</span>
+      </a></li>
+      <li><a class="sched-item" href="#s3" id="nav-s3">
+        <span class="sched-time">12:00 – 1:00</span>
+        <span class="sched-name">Frontier Models</span>
+        <span class="sched-lock" id="lock-s3">🔒 locked</span>
+      </a></li>
+      <li><a class="sched-item" href="#s4" id="nav-s4">
+        <span class="sched-time">1:00 – 2:00</span>
+        <span class="sched-name">Local Models</span>
+        <span class="sched-lock" id="lock-s4">🔒 locked</span>
+      </a></li>
+      <li><a class="sched-item" href="#s5" id="nav-s5">
+        <span class="sched-time">2:15 – 4:00</span>
+        <span class="sched-name">Exploration &amp; Wrap Up</span>
+        <span class="sched-lock" id="lock-s5">🔒 locked</span>
+      </a></li>
+    </ul>
+    <div class="progress-bar-wrap">
+      <div class="progress-label">
+        <span>Day progress</span>
+        <span id="progressPct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+
+    <div class="day-hero">
+      <div class="day-eyebrow">Day 01 — Mission Board</div>
+      <h1 class="day-title">AI Expedition Launch</h1>
+      <p class="day-sub">Set up your hardware, explore the landscape, run your first local model. By 4:00 PM today, AI is running on your desk.</p>
+      <div style="margin-top:1.25rem; display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="tag tag-red">7 hours</span>
+        <span class="tag tag-muted">Pi 400</span>
+        <span class="tag tag-muted">Ollama</span>
+        <span class="tag tag-muted">Gemma 2B</span>
+        <span class="tag tag-green">● Live today</span>
+      </div>
+    </div>
+
+    <!-- SECTION 0: INTRO & ICEBREAKER — always unlocked -->
+    <section class="section-block" id="s0">
+      <div class="block-header">
+        <span class="block-num">01</span>
+        <h2 class="block-title">Intro &amp; Icebreaker</h2>
+        <span class="block-time">9:00 – 9:35</span>
+      </div>
+      <div class="block-divider"></div>
+
+      <div class="info-card">
+        <p><strong>Welcome to camp.</strong> Before we touch any hardware or write a single command, let's figure out who's in the room.</p>
+        <p>Your instructor will walk through the day, set expectations, and get you paired up. Then it's icebreaker time.</p>
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content"><strong>Grab a trivia card</strong> — find the person whose card matches yours. That's your partner for the day.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content"><strong>Pick a team name</strong> — you've got 2 minutes. Backup list is on the projector if you're stuck.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content"><strong>Hot Take or Fact?</strong> — Write 5 statements on the notecard at your station. 2 about your hobbies/interests, 1 about something you're good at or proud of, 1 AI hot take or myth, and 1 is a lie (your choice which). The class has to find it.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Tip:</strong> The more specific your statements are, the harder they are to guess. "I play guitar" is easy. "I learned guitar specifically to play the Minecraft theme song" is hard.
+      </div>
+
+      <div class="unlock-form" id="form-s0">
+        <div class="unlock-form-title">🔓 Unlock the next section</div>
+        <div class="unlock-form-sub">What's your team name? And give us one of your 5 statements — make it a good one.</div>
+        <div class="form-group">
+          <label class="form-label">Your team name</label>
+          <input class="form-input" id="s0-team" type="text" placeholder="e.g. The Neurons, Team Cipher..." maxlength="60">
+        </div>
+        <div class="form-group">
+          <label class="form-label">One of your 5 statements (make it your best one)</label>
+          <input class="form-input" id="s0-statement" type="text" placeholder="e.g. I once speedran Minecraft in under 20 minutes" maxlength="200">
+        </div>
+        <button class="unlock-btn" id="btn-s0" onclick="submitUnlock(0)">Submit &amp; Unlock →</button>
+        <div class="unlock-success" id="success-s0">✓ Unlocked — AI &amp; Data Science block is now open</div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: AI & DATA SCIENCE -->
+    <section class="section-block locked" id="s1">
+      <div class="lock-overlay"><div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-text">Complete the icebreaker to unlock</div></div></div>
+      <div class="block-header">
+        <span class="block-num">02</span>
+        <h2 class="block-title">Intro to AI &amp; Data Science</h2>
+        <span class="block-time">9:35 – 10:30</span>
+      </div>
+      <div class="block-divider"></div>
+
+      <div class="section-unlocked-banner" id="banner-s1">✓ Section unlocked — welcome to the AI block</div>
+
+      <div class="info-card">
+        <p><strong>The big question:</strong> How many times today has AI already made a decision about you? Write your best guess on the notecard at your station. You'll revisit it at the end of this block.</p>
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content"><strong>What is AI &amp; Data Science?</strong> — AI teaches machines to make decisions like humans. Data science finds patterns in massive amounts of information. Key point: AI needs data like a car needs fuel.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content"><strong>The major players</strong> — OpenAI, Google/DeepMind, Anthropic, Meta, Microsoft. These are companies you already use every day. AI isn't coming — it's already here.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content"><strong>The model galaxy</strong> — There are hundreds of AI models. Frontier models like GPT-4o and Claude. Open source models like Llama and Mistral. Specialized models for code, images, audio, and science.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">04</span>
+          <div class="step-content"><strong>Activity — Who's Feeding the Machine?</strong> — Your instructor will give your pair an app card. Answer: what data does it collect? What decision is the AI making? Who benefits — you or the company?</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Think about it:</strong> "Which one of these surprises you the most — AI detecting cancer, Spotify predicting your mood, or AI writing essays for school?"
+      </div>
+
+      <div class="unlock-form" id="form-s1">
+        <div class="unlock-form-title">🔓 Unlock the next section</div>
+        <div class="unlock-form-sub">Answer both questions to unlock the Pi 400 setup block.</div>
+        <div class="form-group">
+          <label class="form-label">Which app did your pair get, and who benefits most from its AI — you or the company? Explain in a sentence.</label>
+          <input class="form-input" id="s1-app" type="text" placeholder="e.g. We got TikTok — the company benefits more because..." maxlength="300">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Revisit your guess: how many times has AI made a decision about you today?</label>
+          <input class="form-input" id="s1-guess" type="text" placeholder="e.g. I said 5 but now I think it's closer to 50..." maxlength="200">
+        </div>
+        <button class="unlock-btn" id="btn-s1" onclick="submitUnlock(1)">Submit &amp; Unlock →</button>
+        <div class="unlock-success" id="success-s1">✓ Unlocked — Pi 400 setup block is now open</div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: PI 400 SETUP -->
+    <section class="section-block locked" id="s2">
+      <div class="lock-overlay"><div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-text">Complete the AI block to unlock</div></div></div>
+      <div class="block-header">
+        <span class="block-num">03</span>
+        <h2 class="block-title">Pi 400 Setup &amp; Deploy</h2>
+        <span class="block-time">10:45 – 11:30</span>
+      </div>
+      <div class="block-divider"></div>
+
+      <div class="section-unlocked-banner" id="banner-s2">✓ Section unlocked — time to build your machine</div>
+
+      <div class="callout warn">
+        <strong>Before you start:</strong> This is your machine for the whole camp. Take your time, follow each step carefully, and call your partner over if something looks wrong. One typo in a command can break everything — read twice, type once.
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content"><strong>Plug in your Pi 400</strong> — power cable, HDMI to monitor (use the port closest to the USB ports), ethernet cable into the switch. Give the ethernet 30–60 seconds to connect after plugging in.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content"><strong>First boot wizard</strong> — set your country, language, timezone. Create your username (your first name) and password: <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-card2);padding:2px 6px;border-radius:3px;">Password01</code>. Skip the software update prompt.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content"><strong>Open Terminal</strong> — click the black monitor icon in the taskbar. Your prompt will look like <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-card2);padding:2px 6px;border-radius:3px;">yourname@raspberrypi:~ $</code> — that's normal.</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Command reference</h3>
+
+      <div class="cmd-block">
+        <div class="cmd-header">
+          <span class="cmd-label">step 1 — install ollama</span>
+          <button class="cmd-copy" onclick="copyCmd(this, 'curl -fsSL https://ollama.com/install.sh | sh')">copy</button>
+        </div>
+        <div class="cmd-body"><span class="cmd-comment"># Download and install Ollama</span>
+curl -fsSL https://ollama.com/install.sh | sh</div>
+      </div>
+
+      <div class="callout warn">
+        <strong>Expected warning:</strong> You'll see "no NVIDIA/AMD GPU detected, running in CPU-only mode" — this is completely normal on the Pi 400. Ignore it and keep going.
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-header">
+          <span class="cmd-label">step 2 — pull gemma 2b model (~2 min)</span>
+          <button class="cmd-copy" onclick="copyCmd(this, 'ollama pull gemma:2b')">copy</button>
+        </div>
+        <div class="cmd-body"><span class="cmd-comment"># Download the Gemma 2B model to your Pi</span>
+ollama pull gemma:2b</div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-header">
+          <span class="cmd-label">step 3 — run your model</span>
+          <button class="cmd-copy" onclick="copyCmd(this, 'ollama run gemma:2b')">copy</button>
+        </div>
+        <div class="cmd-body"><span class="cmd-comment"># Start Gemma 2B — wait ~10 seconds for >>> prompt</span>
+ollama run gemma:2b</div>
+      </div>
+
+      <div class="callout">
+        <strong>First prompt to try:</strong> "What is artificial intelligence in one sentence?" — watch how it types one word at a time. That's the model predicting the next token in real time.
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-header">
+          <span class="cmd-label">ollama commands (type inside the >>> prompt)</span>
+          <button class="cmd-copy" onclick="copyCmd(this, '/bye')">copy /bye</button>
+        </div>
+        <div class="cmd-body"><span class="cmd-comment"># Exit Ollama — ALWAYS use /bye, not exit or quit</span>
+/bye
+
+<span class="cmd-comment"># Clear conversation history</span>
+/clear
+
+<span class="cmd-comment"># Show available commands</span>
+/help</div>
+      </div>
+
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Troubleshooting</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Issue</th><th>Likely cause</th><th>Fix</th></tr></thead>
+          <tbody>
+            <tr><td>No display on boot</td><td>Wrong HDMI port</td><td>Switch to port closest to USB ports</td></tr>
+            <tr><td>Won't boot</td><td>SD card not seated</td><td>Reseat SD card, repower</td></tr>
+            <tr><td>No network</td><td>Cable not negotiated</td><td>Unplug/replug ethernet, wait 60 sec</td></tr>
+            <tr><td>GPU warning</td><td>Expected on Pi</td><td>Ignore and continue</td></tr>
+            <tr><td>Pi freezes on run</td><td>Wrong model</td><td>Make sure it's gemma:2b not phi3:mini</td></tr>
+            <tr><td>/bye doesn't work</td><td>Typed in terminal</td><td>Must be inside the >>> Ollama prompt</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="unlock-form" id="form-s2">
+        <div class="unlock-form-title">🔓 Unlock the next section</div>
+        <div class="unlock-form-sub">Confirm your Pi is set up and tell us what Gemma said.</div>
+        <div class="form-group">
+          <label class="form-label">Pi setup status</label>
+          <select class="form-select" id="s2-status">
+            <option value="">Select your status...</option>
+            <option value="done">✅ Ollama installed, Gemma running, all good</option>
+            <option value="installing">⏳ Still installing / downloading</option>
+            <option value="issue">⚠️ Hit an issue — need help</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">What did Gemma say when you asked it "What is artificial intelligence in one sentence?"</label>
+          <input class="form-input" id="s2-response" type="text" placeholder="Paste or summarize what your Pi said..." maxlength="400">
+        </div>
+        <button class="unlock-btn" id="btn-s2" onclick="submitUnlock(2)">Submit &amp; Unlock →</button>
+        <div class="unlock-success" id="success-s2">✓ Unlocked — Frontier Models block is now open</div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: FRONTIER MODELS -->
+    <section class="section-block locked" id="s3">
+      <div class="lock-overlay"><div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-text">Complete Pi setup to unlock</div></div></div>
+      <div class="block-header">
+        <span class="block-num">04</span>
+        <h2 class="block-title">Intro to Frontier Models</h2>
+        <span class="block-time">12:00 – 1:00</span>
+      </div>
+      <div class="block-divider"></div>
+
+      <div class="section-unlocked-banner" id="banner-s3">✓ Section unlocked — meet the big dogs</div>
+
+      <div class="info-card">
+        <p><strong>Re-energizer first:</strong> Two Truths and a Bot — your instructor will read statements and you vote on which one the AI got wrong. Pay attention — hallucination is real and you'll see it today.</p>
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content"><strong>What are frontier models?</strong> — The most advanced AI systems in existence. Trained on massive datasets using thousands of GPUs. You access them via the cloud — your prompt travels to a data center somewhere and comes back.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content"><strong>Live demo — same prompt, 4 models</strong> — Watch your instructor run this prompt on ChatGPT, Claude, Gemini, and Copilot and compare the responses.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content"><strong>Student prompts</strong> — Suggest a prompt that would actually test the model. Not "tell me a joke." Something that would be hard to get right.</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>The demo prompt:</strong> "You are teaching a high school student how the recommendation algorithm on YouTube or TikTok decides what video to show you next. Explain it in a way that is engaging and easy to understand. Use an analogy."
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Model</th><th>Made by</th><th>Known for</th></tr></thead>
+          <tbody>
+            <tr><td>ChatGPT</td><td>OpenAI</td><td>Most widely used, conversational</td></tr>
+            <tr><td>Claude</td><td>Anthropic</td><td>Safety focused, strong reasoning</td></tr>
+            <tr><td>Gemini</td><td>Google</td><td>Multimodal, integrated into Google tools</td></tr>
+            <tr><td>Copilot</td><td>Microsoft</td><td>Embedded in everyday productivity tools</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="unlock-form" id="form-s3">
+        <div class="unlock-form-title">🔓 Unlock the next section</div>
+        <div class="unlock-form-sub">Two questions about what you just saw.</div>
+        <div class="form-group">
+          <label class="form-label">Which frontier model gave the best response to the YouTube algorithm prompt, and why?</label>
+          <input class="form-input" id="s3-best" type="text" placeholder="e.g. Claude because it used the clearest analogy..." maxlength="300">
+        </div>
+        <div class="form-group">
+          <label class="form-label">What's one weakness you noticed in any of the four models during the demo?</label>
+          <input class="form-input" id="s3-weakness" type="text" placeholder="e.g. Gemini got confident about something that seemed wrong..." maxlength="300">
+        </div>
+        <button class="unlock-btn" id="btn-s3" onclick="submitUnlock(3)">Submit &amp; Unlock →</button>
+        <div class="unlock-success" id="success-s3">✓ Unlocked — Local Models block is now open</div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: LOCAL MODELS -->
+    <section class="section-block locked" id="s4">
+      <div class="lock-overlay"><div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-text">Complete Frontier Models to unlock</div></div></div>
+      <div class="block-header">
+        <span class="block-num">05</span>
+        <h2 class="block-title">Local Models &amp; Ollama</h2>
+        <span class="block-time">1:00 – 2:00</span>
+      </div>
+      <div class="block-divider"></div>
+
+      <div class="section-unlocked-banner" id="banner-s4">✓ Section unlocked — your machine, your model</div>
+
+      <div class="info-card">
+        <p><strong>The shift:</strong> Everything you saw after lunch was running on hardware worth millions of dollars in a data center somewhere. What you're about to do runs on hardware sitting on your desk — no cloud, no internet required, no data leaving this room.</p>
+      </div>
+
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Step 1 — Connect to the camp AI server</h3>
+
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content"><strong>Open Chromium</strong> on your Pi and navigate to the camp AI server. Log in with your first name and <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-card2);padding:2px 6px;border-radius:3px;">Password01</code>.</div>
+        </div>
+      </div>
+
+      <div class="cmd-block">
+        <div class="cmd-header">
+          <span class="cmd-label">camp AI server</span>
+          <button class="cmd-copy" onclick="copyCmd(this, 'http://10.2.128.89:3000')">copy URL</button>
+        </div>
+        <div class="cmd-body">http://10.2.128.89:3000
+
+<span class="cmd-comment"># Username: your first name</span>
+<span class="cmd-comment"># Password: Password01</span>
+<span class="cmd-comment"># Model: Llama 3.1 8B</span></div>
+      </div>
+
+      <div class="callout">
+        <strong>First prompt on the server:</strong> Run the same YouTube algorithm prompt from the Frontier Models block. How does Llama 3.1 8B compare to what ChatGPT said?
+      </div>
+
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">The three-way comparison</h3>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Frontier</th><th>Camp Server</th><th>Your Pi</th></tr></thead>
+          <tbody>
+            <tr><td>Model</td><td>GPT-4o / Claude</td><td>Llama 3.1 8B</td><td>Gemma 2B</td></tr>
+            <tr><td>Hardware</td><td>1000s of GPUs</td><td>RTX 5000 32GB</td><td>Pi 400 CPU only</td></tr>
+            <tr><td>Response speed</td><td>Fast</td><td>Fast</td><td>~35 seconds</td></tr>
+            <tr><td>Privacy</td><td>Sent to company</td><td>Stays in this room</td><td>Stays on your Pi</td></tr>
+            <tr><td>Cost</td><td>Subscription</td><td>~$3,000 hardware</td><td>~$100 hardware</td></tr>
+            <tr><td>Internet needed</td><td>Yes</td><td>No</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="unlock-form" id="form-s4">
+        <div class="unlock-form-title">🔓 Unlock the final block</div>
+        <div class="unlock-form-sub">One question about the three-way comparison.</div>
+        <div class="form-group">
+          <label class="form-label">Looking at the comparison table — which option would you personally choose and why? Is there a right answer?</label>
+          <input class="form-input" id="s4-compare" type="text" placeholder="e.g. I'd choose the camp server because..." maxlength="400">
+        </div>
+        <button class="unlock-btn" id="btn-s4" onclick="submitUnlock(4)">Submit &amp; Unlock →</button>
+        <div class="unlock-success" id="success-s4">✓ Unlocked — Exploration block is now open</div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: EXPLORATION & WRAP UP -->
+    <section class="section-block locked" id="s5">
+      <div class="lock-overlay"><div class="lock-badge"><div class="lock-icon">🔒</div><div class="lock-text">Complete Local Models to unlock</div></div></div>
+      <div class="block-header">
+        <span class="block-num">06</span>
+        <h2 class="block-title">Open Exploration &amp; Wrap Up</h2>
+        <span class="block-time">2:15 – 4:00</span>
+      </div>
+      <div class="block-divider"></div>
+
+      <div class="section-unlocked-banner" id="banner-s5">✓ Final block unlocked — let's see what you can break</div>
+
+      <div class="info-card">
+        <p><strong>Two rounds.</strong> First you break it. Then you fix it. Both happen on the camp server — use your account in Chromium.</p>
+      </div>
+
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Round 1 — Stump the AI (2:20 – 2:35)</h3>
+
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content"><strong>Goal:</strong> Find something that breaks, confuses, or produces a hilariously wrong response. Try both your Pi AND the camp server with the same prompt.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content"><strong>Starter ideas:</strong> Ask about recent news. Ask it to do complex math. Ask something hyper-local (best restaurant in Alexandria MN). Ask a trick question. Ask it to predict the future.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content"><strong>Save your best failure</strong> — screenshot or write it down. You'll share it with the class.</div>
+        </div>
+      </div>
+
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Round 2 — Fix it with a System Prompt (2:35 – 3:10)</h3>
+
+      <div class="callout">
+        <strong>What is a system prompt?</strong> Instructions you give the AI before the conversation starts. It shapes its personality, what it knows, and how it responds. It's the difference between a generic AI and one built for a specific purpose.
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">01</span>
+          <div class="step-content"><strong>Build your AI personality</strong> on the camp server. Use the system prompt field in the chat settings.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">02</span>
+          <div class="step-content"><strong>Your system prompt should define:</strong> who the AI is, what it specializes in, how it talks, what it will/won't do, any special rules.</div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">03</span>
+          <div class="step-content"><strong>Test it with at least 5 prompts</strong> — iterate until it behaves the way you want. Then be ready to demo it.</div>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <p><strong>Inspiration:</strong> A sarcastic AI that only speaks in movie quotes. A gaming coach for your favorite game. A pirate who happens to be a cybersecurity expert. A hype man that turns everything into a motivational speech. A brutally honest code reviewer. An AI that explains everything using food analogies.</p>
+      </div>
+
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Day 1 reflection</h3>
+
+      <div class="unlock-form" id="form-s5">
+        <div class="unlock-form-title">📋 End of Day Reflection</div>
+        <div class="unlock-form-sub">Three questions to close out Day 1. Your answers go to your instructor.</div>
+        <div class="form-group">
+          <label class="form-label">What is one thing you learned today that genuinely surprised you?</label>
+          <textarea class="form-textarea" id="s5-surprise" placeholder="e.g. I had no idea you could run AI locally without the internet..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">What is one thing you want to explore more this week?</label>
+          <textarea class="form-textarea" id="s5-explore" placeholder="e.g. I want to understand how the models actually learn..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">What would you build if you could build anything with AI?</label>
+          <textarea class="form-textarea" id="s5-build" placeholder="e.g. I'd build a game that adapts to how you play..."></textarea>
+        </div>
+        <button class="unlock-btn" id="btn-s5" onclick="submitUnlock(5)">Submit Day 1 Reflection →</button>
+        <div class="unlock-success" id="success-s5">✓ Day 1 complete — see you tomorrow</div>
+      </div>
+
+      <div id="day-complete" style="display:none; margin-top:2rem; padding:2rem; background:var(--green-dim); border:1px solid var(--green); border-radius:10px; text-align:center;">
+        <div style="font-size:2rem; margin-bottom:1rem;">🎉</div>
+        <div style="font-family:var(--font-display); font-size:1.25rem; font-weight:700; color:var(--green); margin-bottom:0.5rem;">Day 1 complete.</div>
+        <div style="font-size:14px; color:var(--text-muted); line-height:1.6;">You walked in knowing AI existed. You're leaving knowing how it works, where it runs, and how to talk to it on your own terms. See you tomorrow.</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const SECTIONS = ['s0','s1','s2','s3','s4','s5'];
+const unlocked = JSON.parse(localStorage.getItem('day1_unlocked') || '[true,false,false,false,false,false]');
+
+function applyState() {
+  let count = unlocked.filter(Boolean).length;
+  const pct = Math.round(((count - 1) / 5) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  SECTIONS.forEach((id, i) => {
+    const block = document.getElementById(id);
+    const navItem = document.getElementById('nav-' + id);
+    const lockEl = document.getElementById('lock-' + id);
+    const banner = document.getElementById('banner-' + id);
+    if (unlocked[i]) {
+      block.classList.remove('locked');
+      if (navItem) {
+        navItem.classList.remove('locked');
+        if (lockEl) lockEl.style.display = 'none';
+      }
+      if (banner && i > 0) banner.style.display = 'flex';
+    }
+  });
+}
+
+function getFields(sectionIndex) {
+  const map = {
+    0: ['s0-team','s0-statement'],
+    1: ['s1-app','s1-guess'],
+    2: ['s2-status','s2-response'],
+    3: ['s3-best','s3-weakness'],
+    4: ['s4-compare'],
+    5: ['s5-surprise','s5-explore','s5-build']
+  };
+  return map[sectionIndex];
+}
+
+function submitUnlock(i) {
+  const fields = getFields(i);
+  const allFilled = fields.every(id => {
+    const el = document.getElementById(id);
+    return el && el.value.trim().length > 2;
+  });
+  if (!allFilled) {
+    fields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && el.value.trim().length <= 2) {
+        el.style.borderColor = 'var(--red)';
+        setTimeout(() => el.style.borderColor = '', 1500);
+      }
+    });
+    return;
+  }
+  const successEl = document.getElementById('success-s' + i);
+  const btnEl = document.getElementById('btn-s' + i);
+  btnEl.disabled = true;
+  successEl.style.display = 'flex';
+  if (i < 5) {
+    unlocked[i + 1] = true;
+    localStorage.setItem('day1_unlocked', JSON.stringify(unlocked));
+    setTimeout(() => {
+      applyState();
+      const nextSection = document.getElementById('s' + (i + 1));
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 600);
+  } else {
+    document.getElementById('day-complete').style.display = 'block';
+    unlocked[5] = true;
+    localStorage.setItem('day1_unlocked', JSON.stringify(unlocked));
+    applyState();
+  }
+}
+
+function copyCmd(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 1800);
+  });
+}
+
+const toggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('campTheme') || 'dark';
+if (saved === 'light') {
+  document.documentElement.setAttribute('data-theme', 'light');
+  toggle.textContent = '🌙';
+}
+toggle.addEventListener('click', () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  if (current === 'light') {
+    document.documentElement.removeAttribute('data-theme');
+    toggle.textContent = '☀️';
+    localStorage.setItem('campTheme', 'dark');
+  } else {
+    document.documentElement.setAttribute('data-theme', 'light');
+    toggle.textContent = '🌙';
+    localStorage.setItem('campTheme', 'light');
+  }
+});
+
+applyState();
+</script>
+</body>
+</html>
