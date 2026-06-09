@@ -323,6 +323,55 @@
     font-size: 13px; color: var(--text-muted);
     margin-bottom: 1.25rem; line-height: 1.5;
   }
+  .form-portal {
+    margin: 1rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .form-portal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--bg-card2);
+    border-bottom: 1px solid var(--border);
+  }
+  .form-portal-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-portal-label::before {
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+  }
+  .form-portal-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--green);
+    background: var(--green-dim);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .form-portal-body {
+    background: #ffffff;
+    padding: 0;
+  }
+  .form-portal-body iframe {
+    display: block;
+    width: 100%;
+    border: none;
+  }
   .form-group { margin-bottom: 1rem; }
   .form-label {
     display: block; font-size: 13px; font-weight: 500;
@@ -530,8 +579,14 @@
       <div class="unlock-form" id="form-s0">
         <div class="unlock-form-title">🔓 Unlock the next section</div>
         <div class="unlock-form-sub">Fill out the form below, then click the unlock button when done.</div>
-        <div style="margin:1rem 0;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
-          <iframe width="100%" height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUNE9OMTY0SjBPMzI1VDRBNVFXQ1BWM0k4Ny4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border:none;max-width:100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+        <div class="form-portal">
+          <div class="form-portal-header">
+            <span class="form-portal-label">Day 1 — Icebreaker Check-in</span>
+            <span class="form-portal-badge">responses → OneDrive</span>
+          </div>
+          <div class="form-portal-body">
+            <iframe height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUNE9OMTY0SjBPMzI1VDRBNVFXQ1BWM0k4Ny4u&embed=true" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+          </div>
         </div>
         <div class="callout" style="margin-bottom:1rem;">
           <strong>Submitted your form?</strong> Click the button below to unlock the next section.
@@ -583,8 +638,14 @@
       <div class="unlock-form" id="form-s1">
         <div class="unlock-form-title">🔓 Unlock the next section</div>
         <div class="unlock-form-sub">Fill out the form below, then click the unlock button when done.</div>
-        <div style="margin:1rem 0;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
-          <iframe width="100%" height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUNE9aRzFEQzREREZGNFE1NDRLVUs3RFc2Qi4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border:none;max-width:100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+        <div class="form-portal">
+          <div class="form-portal-header">
+            <span class="form-portal-label">Day 1 — AI &amp; Data Science Check</span>
+            <span class="form-portal-badge">responses → OneDrive</span>
+          </div>
+          <div class="form-portal-body">
+            <iframe height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUNE9aRzFEQzREREZGNFE1NDRLVUs3RFc2Qi4u&embed=true" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+          </div>
         </div>
         <div class="callout" style="margin-bottom:1rem;">
           <strong>Submitted your form?</strong> Click the button below to unlock the next section.
@@ -677,6 +738,38 @@ ollama run gemma:2b</div>
 /help</div>
       </div>
 
+      <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Setup checklist</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:1rem;">Tick each step as you complete it. All 6 checked = you're ready to submit.</p>
+      <div class="checklist" id="pi-checklist">
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <span>Pi is booted and showing the desktop</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <span>Connected to campus network — two arrows visible in taskbar</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <span>Terminal is open and showing my username prompt</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <span>Ollama installed successfully — no errors</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <span>Gemma 2B downloaded — <code style="font-family:var(--font-mono);font-size:12px;background:var(--bg-card2);padding:2px 5px;border-radius:3px;">ollama pull gemma:2b</code> completed</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this)">
+          <div class="check-box">✓</div>
+          <span>Model is responding to prompts — I got a reply from Gemma</span>
+        </div>
+      </div>
+      <div id="checklist-complete" style="display:none;margin-bottom:1.5rem;" class="callout">
+        <strong>All steps complete!</strong> Fill out the form below and unlock the next section.
+      </div>
+
       <h3 style="font-family:var(--font-display);font-size:1rem;font-weight:600;margin:1.5rem 0 1rem;">Troubleshooting</h3>
       <div class="table-wrap">
         <table>
@@ -695,8 +788,14 @@ ollama run gemma:2b</div>
       <div class="unlock-form" id="form-s2">
         <div class="unlock-form-title">🔓 Unlock the next section</div>
         <div class="unlock-form-sub">Fill out the form below, then click the unlock button when done.</div>
-        <div style="margin:1rem 0;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
-          <iframe width="100%" height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUOEtOTUhBQUlKQzZUN080SENFV1I3NEUyTy4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border:none;max-width:100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+        <div class="form-portal">
+          <div class="form-portal-header">
+            <span class="form-portal-label">Day 1 — Pi 400 Setup Check</span>
+            <span class="form-portal-badge">responses → OneDrive</span>
+          </div>
+          <div class="form-portal-body">
+            <iframe height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUOEtOTUhBQUlKQzZUN080SENFV1I3NEUyTy4u&embed=true" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+          </div>
         </div>
         <div class="callout" style="margin-bottom:1rem;">
           <strong>Submitted your form?</strong> Click the button below to unlock the next section.
@@ -756,8 +855,14 @@ ollama run gemma:2b</div>
       <div class="unlock-form" id="form-s3">
         <div class="unlock-form-title">🔓 Unlock the next section</div>
         <div class="unlock-form-sub">Fill out the form below, then click the unlock button when done.</div>
-        <div style="margin:1rem 0;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
-          <iframe width="100%" height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUNzQ1QjhKWUUxN0RQMkM2QktLSFRLNkRSVy4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border:none;max-width:100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+        <div class="form-portal">
+          <div class="form-portal-header">
+            <span class="form-portal-label">Day 1 — Frontier Models Check</span>
+            <span class="form-portal-badge">responses → OneDrive</span>
+          </div>
+          <div class="form-portal-body">
+            <iframe height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUNzQ1QjhKWUUxN0RQMkM2QktLSFRLNkRSVy4u&embed=true" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+          </div>
         </div>
         <div class="callout" style="margin-bottom:1rem;">
           <strong>Submitted your form?</strong> Click the button below to unlock the next section.
@@ -827,8 +932,14 @@ ollama run gemma:2b</div>
       <div class="unlock-form" id="form-s4">
         <div class="unlock-form-title">🔓 Unlock the final block</div>
         <div class="unlock-form-sub">Fill out the form below, then click the unlock button when done.</div>
-        <div style="margin:1rem 0;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
-          <iframe width="100%" height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RURVFSSjlUQ1Q3NVpWVzNXVTk4QVpTMUpHUS4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border:none;max-width:100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+        <div class="form-portal">
+          <div class="form-portal-header">
+            <span class="form-portal-label">Day 1 — Local Models Check</span>
+            <span class="form-portal-badge">responses → OneDrive</span>
+          </div>
+          <div class="form-portal-body">
+            <iframe height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RURVFSSjlUQ1Q3NVpWVzNXVTk4QVpTMUpHUS4u&embed=true" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+          </div>
         </div>
         <div class="callout" style="margin-bottom:1rem;">
           <strong>Submitted your form?</strong> Click the button below to unlock the final section.
@@ -901,8 +1012,14 @@ ollama run gemma:2b</div>
       <div class="unlock-form" id="form-s5">
         <div class="unlock-form-title">📋 End of Day Reflection</div>
         <div class="unlock-form-sub">Fill out the reflection form below — your answers go straight to your instructor. Then click submit when done.</div>
-        <div style="margin:1rem 0;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
-          <iframe width="100%" height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUQ1RJVlNSTDZEVzJZTVU2Nk5FSkJNWUpDQS4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border:none;max-width:100%;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+        <div class="form-portal">
+          <div class="form-portal-header">
+            <span class="form-portal-label">Day 1 — End of Day Reflection</span>
+            <span class="form-portal-badge">responses → OneDrive</span>
+          </div>
+          <div class="form-portal-body">
+            <iframe height="480px" src="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=xscRULQKq0ae9PrnSpIafy2WLxtfkWBKilRaWpsLe0RUQ1RJVlNSTDZEVzJZTVU2Nk5FSkJNWUpDQS4u&embed=true" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen></iframe>
+          </div>
         </div>
         <div class="callout" style="margin-bottom:1rem;">
           <strong>Submitted your reflection?</strong> Click the button below to complete Day 1.
@@ -968,6 +1085,17 @@ function submitUnlock(i) {
     setTimeout(() => {
       document.getElementById('day-complete').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 600);
+  }
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  const checklist = document.getElementById('pi-checklist');
+  if (checklist) {
+    const all = checklist.querySelectorAll('.check-item');
+    const done = checklist.querySelectorAll('.check-item.checked');
+    const banner = document.getElementById('checklist-complete');
+    if (banner) banner.style.display = done.length === all.length ? 'block' : 'none';
   }
 }
 
