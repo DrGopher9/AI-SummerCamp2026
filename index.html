@@ -1,474 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI & Data Science Camp — ATCC</title>
+<title>AI & Data Science Camp — ATCC · Summer 2026</title>
+<meta name="description" content="Four days of AI, data science, and cybersecurity at Alexandria Technical & Community College. Real hardware. No limits.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0D0D0D;
-    --bg-card: #1A1A2E;
-    --bg-card2: #12121F;
-    --text: #F5F0E8;
-    --text-muted: #9B9B9B;
-    --red: #CC0000;
-    --red-glow: rgba(204,0,0,0.15);
-    --green: #00FF9C;
-    --green-dim: rgba(0,255,156,0.1);
-    --border: rgba(255,255,255,0.08);
-    --border-hover: rgba(255,255,255,0.15);
-    --font-display: 'Space Grotesk', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-  }
-  [data-theme="light"] {
-    --bg: #F5F0E8;
-    --bg-card: #FFFFFF;
-    --bg-card2: #EFEFEF;
-    --text: #0D0D0D;
-    --text-muted: #666666;
-    --red: #CC0000;
-    --red-glow: rgba(204,0,0,0.08);
-    --green: #007A4D;
-    --green-dim: rgba(0,122,77,0.08);
-    --border: rgba(0,0,0,0.08);
-    --border-hover: rgba(0,0,0,0.15);
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
-  }
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
-  .nav-logo {
-    width: 32px;
-    height: 32px;
-    background: var(--red);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    font-weight: 500;
-    color: #fff;
-    flex-shrink: 0;
-  }
-  .nav-title {
-    font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-  }
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .nav-day {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    padding: 5px 12px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: all 0.2s;
-    cursor: pointer;
-    background: transparent;
-  }
-  .nav-day:hover { border-color: var(--border-hover); color: var(--text); }
-  .nav-day.active { border-color: var(--red); color: var(--red); }
-  .nav-day.disabled { opacity: 0.35; pointer-events: none; }
-  .theme-toggle {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--text-muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    transition: all 0.2s;
-    margin-left: 8px;
-  }
-  .theme-toggle:hover { border-color: var(--border-hover); color: var(--text); }
-  main { padding-top: 56px; }
-  .hero {
-    min-height: 88vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5rem 3rem 4rem;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .hero-eyebrow {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--green);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 24px;
-    height: 1px;
-    background: var(--green);
-  }
-  .hero-title {
-    font-family: var(--font-display);
-    font-size: clamp(2.8rem, 8vw, 5.5rem);
-    font-weight: 700;
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    margin-bottom: 1.5rem;
-  }
-  .hero-title .accent { color: var(--red); }
-  .hero-sub {
-    font-size: 1.15rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    max-width: 560px;
-    margin-bottom: 3rem;
-  }
-  .hero-cta {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-  .btn-primary {
-    font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 600;
-    padding: 12px 28px;
-    background: var(--red);
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: opacity 0.2s;
-  }
-  .btn-primary:hover { opacity: 0.88; }
-  .btn-secondary {
-    font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 500;
-    padding: 12px 28px;
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border-hover);
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s;
-  }
-  .btn-secondary:hover { border-color: var(--text); }
-  .terminal-strip {
-    background: var(--bg-card2);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 1rem 2rem;
-    overflow: hidden;
-  }
-  .terminal-scroll {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--green);
-    white-space: nowrap;
-    animation: marquee 28s linear infinite;
-    display: inline-block;
-  }
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .days-section {
-    padding: 5rem 3rem;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .section-label {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 2.5rem;
-  }
-  .days-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-  }
-  .day-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.5rem;
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-  .day-card:hover:not(.day-locked) {
-    border-color: var(--border-hover);
-    transform: translateY(-2px);
-  }
-  .day-card.day-active {
-    border-color: var(--red);
-  }
-  .day-card.day-active::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--red);
-  }
-  .day-card.day-locked {
-    opacity: 0.45;
-    cursor: default;
-  }
-  .day-num {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 0.08em;
-  }
-  .day-card.day-active .day-num { color: var(--red); }
-  .day-name {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 600;
-    line-height: 1.2;
-  }
-  .day-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.5;
-    flex: 1;
-  }
-  .day-status {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    padding: 3px 8px;
-    border-radius: 3px;
-    display: inline-block;
-    width: fit-content;
-  }
-  .status-live { background: var(--red-glow); color: var(--red); }
-  .status-soon { background: var(--border); color: var(--text-muted); }
-  .resources-section {
-    padding: 3rem 3rem 6rem;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .resources-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 12px;
-    margin-top: 2rem;
-  }
-  .resource-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .resource-label {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-  .resource-name {
-    font-family: var(--font-display);
-    font-size: 15px;
-    font-weight: 600;
-  }
-  .resource-url {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--green);
-    text-decoration: none;
-    word-break: break-all;
-  }
-  .resource-url:hover { text-decoration: underline; }
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 2rem;
-    text-align: center;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-muted);
-  }
+:root{
+  --display:"Bricolage Grotesque", system-ui, sans-serif;
+  --body:"Atkinson Hyperlegible", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, monospace;
+  --max:1080px;
+  --rad:10px;
+}
+html[data-theme="dark"]{
+  --bg:#10161E; --bg-soft:#141C26; --panel:#19222D; --panel-2:#1F2A37;
+  --line:#2B3A4A; --line-soft:#222F3D;
+  --ink:#E9EEF3; --muted:#92A3B4; --faint:#5F7283;
+  --amber:#FFB454; --amber-strong:#FF9E2C; --amber-ink:#FFB454; --amber-dim:rgba(255,180,84,.12);
+  --done:#5BD6A2; --lock:#55687A;
+  --code-bg:#0B1117; --code-ink:#D7E2EC;
+  --hud-bg:rgba(16,22,30,.97);
+}
+html[data-theme="light"]{
+  --bg:#F6F1E7; --bg-soft:#F0EADD; --panel:#FFFDF8; --panel-2:#FAF5EA;
+  --line:#DFD5C2; --line-soft:#E9E0CF;
+  --ink:#1B2430; --muted:#5B6B7A; --faint:#8A97A4;
+  --amber:#FFB454; --amber-strong:#E07F00; --amber-ink:#A85E00; --amber-dim:rgba(224,127,0,.10);
+  --done:#1E9E6A; --lock:#9AA7B3;
+  --code-bg:#101820; --code-ink:#D7E2EC;
+  --hud-bg:rgba(246,241,231,.97);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);background:var(--bg);color:var(--ink);font-size:17px;line-height:1.6}
+a{color:var(--amber-ink);text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--amber-strong);outline-offset:2px;border-radius:4px}
+::selection{background:var(--amber);color:#1B2430}
+
+/* nav */
+.hud{position:sticky;top:0;z-index:60;background:var(--hud-bg);border-bottom:1px solid var(--line)}
+.hud-inner{max-width:var(--max);margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.hud-brand{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.02em}
+.hud-brand a{color:var(--ink)}
+.hud-brand .blip{color:var(--amber-strong)}
+.hud-days{display:flex;gap:6px;margin-left:auto;align-items:center}
+.hud-days a,.hud-days span{font-family:var(--mono);font-size:12.5px;border:1px solid var(--line);border-radius:999px;padding:4px 13px;color:var(--muted);white-space:nowrap}
+.hud-days a.live{color:var(--amber-ink);border-color:var(--amber-strong)}
+.hud-days a:hover{text-decoration:none;color:var(--ink)}
+.hud-days span{color:var(--lock);border-style:dashed}
+.theme-btn{font-family:var(--mono);font-size:12px;color:var(--muted);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer}
+.theme-btn:hover{color:var(--ink);border-color:var(--amber-strong)}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 20px}
+
+/* hero */
+.hero{padding:64px 0 48px;display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+@media (max-width:860px){.hero{grid-template-columns:1fr;padding-top:40px}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber-ink);margin-bottom:14px}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(38px,6vw,62px);line-height:1.02;letter-spacing:-.02em;margin-bottom:18px}
+.hero h1 em{font-style:normal;color:var(--amber-ink)}
+.hero p.lede{color:var(--muted);font-size:18.5px;max-width:48ch;margin-bottom:26px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:13.5px;font-weight:600;letter-spacing:.04em;border-radius:8px;padding:13px 24px;cursor:pointer;display:inline-block}
+.btn.primary{background:var(--amber-strong);color:#1B2430;border:1px solid var(--amber-strong)}
+.btn.primary:hover{background:var(--amber);text-decoration:none}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--muted)}
+.btn.ghost:hover{border-color:var(--amber-strong);color:var(--ink);text-decoration:none}
+
+/* hero terminal */
+.heroterm{background:var(--code-bg);border:1px solid var(--line);border-radius:var(--rad);overflow:hidden;box-shadow:0 14px 38px rgba(0,0,0,.30)}
+.heroterm .bar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.07)}
+.heroterm .bar i{width:9px;height:9px;border-radius:50%;background:#3A4654;display:block}
+.heroterm .bar i:first-child{background:var(--amber-strong)}
+.heroterm .bar .name{font-family:var(--mono);font-size:11px;color:#7E93A6;letter-spacing:.06em;margin-left:4px}
+.heroterm pre{font-family:var(--mono);font-size:13.5px;line-height:1.9;color:var(--code-ink);padding:16px 18px;white-space:pre;overflow-x:auto}
+.heroterm .p{color:#FFB454}
+.heroterm .c{color:#647A8E}
+.heroterm .ok{color:#5BD6A2}
+.cursor{display:inline-block;width:8px;height:15px;background:#FFB454;vertical-align:-2px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.cursor{animation:none}}
+
+/* section headers */
+.sect{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin:54px 0 18px;display:flex;align-items:center;gap:14px}
+.sect::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* day cards */
+.days{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:760px){.days{grid-template-columns:1fr}}
+.day{border:1px solid var(--line);border-radius:var(--rad);background:var(--panel);padding:24px 26px;position:relative;display:block;color:var(--ink)}
+a.day:hover{text-decoration:none;border-color:var(--amber-strong)}
+.day .dnum{font-family:var(--mono);font-size:12px;color:var(--amber-ink);letter-spacing:.1em}
+.day h3{font-family:var(--display);font-weight:800;font-size:22px;margin:8px 0 6px}
+.day p{font-size:15px;color:var(--muted)}
+.day .status{font-family:var(--mono);font-size:11.5px;margin-top:14px;display:inline-block;border-radius:999px;padding:3px 11px}
+.day .status.live{color:var(--amber-ink);border:1px solid var(--amber-strong)}
+.day .status.soon{color:var(--lock);border:1px dashed var(--line)}
+.day.locked{opacity:.65}
+.day.locked .dnum{color:var(--faint)}
+
+/* quick access */
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:860px){.quick{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.quick{grid-template-columns:1fr}}
+.q{border:1px solid var(--line);border-radius:var(--rad);background:var(--bg-soft);padding:18px 20px;display:block;color:var(--ink)}
+a.q:hover{text-decoration:none;border-color:var(--amber-strong)}
+.q .ql{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.q b{font-family:var(--display);font-size:17px;display:block;margin:5px 0 2px}
+.q span{font-family:var(--mono);font-size:12.5px;color:var(--amber-ink)}
+.q.server{border-color:var(--amber-strong);background:var(--amber-dim)}
+
+footer{margin:70px 0 40px;border-top:1px solid var(--line);padding-top:22px;font-family:var(--mono);font-size:12px;color:var(--faint);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 </style>
 </head>
 <body>
-<nav>
-  <a class="nav-brand" href="index.html">
-    <div class="nav-logo">AI</div>
-    <span class="nav-title">Camp Command Center</span>
-  </a>
-  <div class="nav-right">
-    <a class="nav-day active" href="day1.html">Day 1</a>
-    <span class="nav-day disabled">Day 2</span>
-    <span class="nav-day disabled">Day 3</span>
-    <span class="nav-day disabled">Day 4</span>
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">☀️</button>
-  </div>
-</nav>
 
-<main>
+<header class="hud">
+  <div class="hud-inner">
+    <div class="hud-brand"><a href="index.html"><span class="blip">▮</span> ATCC AI CAMP</a></div>
+    <nav class="hud-days" aria-label="Camp days">
+      <a class="live" href="day1.html">Day 1</a>
+      <span>Day 2</span>
+      <span>Day 3</span>
+      <span>Day 4</span>
+    </nav>
+    <button class="theme-btn" id="themeBtn" aria-label="Toggle light or dark theme">☀ light</button>
+  </div>
+</header>
+
+<div class="wrap">
+
   <section class="hero">
-    <div class="hero-eyebrow">Alexandria Technical &amp; Community College — Summer 2026</div>
-    <h1 class="hero-title">
-      Run AI.<br>
-      <span class="accent">Break things.</span><br>
-      Build something real.
-    </h1>
-    <p class="hero-sub">
-      Explore how AI works, how data powers your favorite apps, and how cybersecurity stops digital bad guys. Four days. Real hardware. No limits.
-    </p>
-    <div class="hero-cta">
-      <a class="btn-primary" href="day1.html">Start Day 1 →</a>
-      <a class="btn-secondary" href="#days">View all days</a>
+    <div>
+      <div class="eyebrow">Alexandria Technical &amp; Community College · Summer 2026</div>
+      <h1>Run AI.<br>Break things.<br><em>Build something real.</em></h1>
+      <p class="lede">Four days of AI, data science, and cybersecurity — on real hardware that's yours for the week. By day one's end, you'll have a language model running on the desk in front of you.</p>
+      <div class="cta-row">
+        <a class="btn primary" href="day1.html">Start Day 1 →</a>
+        <a class="btn ghost" href="#days">View all days</a>
+      </div>
+    </div>
+    <div class="heroterm" aria-hidden="true">
+      <div class="bar"><i></i><i></i><i></i><span class="name">you@raspberrypi: ~</span></div>
+      <pre><span class="p">$</span> curl -fsSL https://ollama.com/install.sh | sh
+<span class="c">&gt;&gt;&gt; Installing ollama…</span>
+<span class="ok">&gt;&gt;&gt; Install complete.</span>
+<span class="p">$</span> ollama pull gemma:2b
+<span class="ok">pulling… 100% ▕████████████▏ success</span>
+<span class="p">$</span> ollama run gemma:2b
+<span class="p">&gt;&gt;&gt;</span> <span class="cursor"></span></pre>
     </div>
   </section>
 
-  <div class="terminal-strip">
-    <span class="terminal-scroll">
-      $ ollama run gemma:2b &nbsp;&nbsp;///&nbsp;&nbsp; $ curl -fsSL https://ollama.com/install.sh | sh &nbsp;&nbsp;///&nbsp;&nbsp; $ ollama pull gemma:2b &nbsp;&nbsp;///&nbsp;&nbsp; $ hostname -I &nbsp;&nbsp;///&nbsp;&nbsp; $ sudo apt update && sudo apt upgrade -y &nbsp;&nbsp;///&nbsp;&nbsp; $ ollama list &nbsp;&nbsp;///&nbsp;&nbsp; $ ollama run gemma:2b &nbsp;&nbsp;///&nbsp;&nbsp; $ curl -fsSL https://ollama.com/install.sh | sh &nbsp;&nbsp;///&nbsp;&nbsp; $ ollama pull gemma:2b &nbsp;&nbsp;///&nbsp;&nbsp; $ hostname -I &nbsp;&nbsp;///&nbsp;&nbsp; $ sudo apt update && sudo apt upgrade -y &nbsp;&nbsp;///&nbsp;&nbsp; $ ollama list &nbsp;&nbsp;///&nbsp;&nbsp;
-    </span>
+  <h2 class="sect" id="days">// camp schedule</h2>
+  <div class="days">
+    <a class="day" href="day1.html">
+      <span class="dnum">DAY_01 · MON JUNE 15</span>
+      <h3>AI Expedition Launch</h3>
+      <p>Set up your hardware, explore the AI landscape, and run your first local model — frontier, server, and Pi, all in one day.</p>
+      <span class="status live">● live now</span>
+    </a>
+    <div class="day locked">
+      <span class="dnum">DAY_02 · TUE JUNE 16</span>
+      <h3>Data &amp; How AI Thinks</h3>
+      <p>Dive deeper into how AI models learn and how data shapes everything.</p>
+      <span class="status soon">coming soon</span>
+    </div>
+    <div class="day locked">
+      <span class="dnum">DAY_03 · WED JUNE 17</span>
+      <h3>Build Your Chatbot</h3>
+      <p>Deploy your own chatbot from scratch on the local server.</p>
+      <span class="status soon">coming soon</span>
+    </div>
+    <div class="day locked">
+      <span class="dnum">DAY_04 · THU JUNE 18</span>
+      <h3>Cybersecurity &amp; Showcase</h3>
+      <p>Attack, defend, and ship your final project to the world.</p>
+      <span class="status soon">coming soon</span>
+    </div>
   </div>
 
-  <section class="days-section" id="days">
-    <div class="section-label">// Camp schedule</div>
-    <div class="days-grid">
-      <a class="day-card day-active" href="day1.html">
-        <div class="day-num">DAY_01</div>
-        <div class="day-name">AI Expedition Launch</div>
-        <div class="day-desc">Set up your hardware, explore the AI landscape, and run your first local model.</div>
-        <div class="day-status status-live">● Live now</div>
-      </a>
-      <div class="day-card day-locked">
-        <div class="day-num">DAY_02</div>
-        <div class="day-name">Data & How AI Thinks</div>
-        <div class="day-desc">Dive deeper into how AI models learn and how data shapes everything.</div>
-        <div class="day-status status-soon">Coming soon</div>
-      </div>
-      <div class="day-card day-locked">
-        <div class="day-num">DAY_03</div>
-        <div class="day-name">Build Your Chatbot</div>
-        <div class="day-desc">Deploy your own chatbot from scratch on the local server.</div>
-        <div class="day-status status-soon">Coming soon</div>
-      </div>
-      <div class="day-card day-locked">
-        <div class="day-num">DAY_04</div>
-        <div class="day-name">Cybersecurity & Showcase</div>
-        <div class="day-desc">Attack, defend, and ship your final project to the world.</div>
-        <div class="day-status status-soon">Coming soon</div>
-      </div>
-    </div>
-  </section>
+  <h2 class="sect">// quick access</h2>
+  <div class="quick">
+    <a class="q server" href="http://10.2.128.89:3000">
+      <span class="ql">local ai server</span>
+      <b>Camp Ollama + WebUI</b>
+      <span>10.2.128.89:3000</span>
+    </a>
+    <a class="q" href="https://chat.openai.com">
+      <span class="ql">frontier model</span>
+      <b>ChatGPT</b>
+      <span>chat.openai.com</span>
+    </a>
+    <a class="q" href="https://claude.ai">
+      <span class="ql">frontier model</span>
+      <b>Claude</b>
+      <span>claude.ai</span>
+    </a>
+    <a class="q" href="https://gemini.google.com">
+      <span class="ql">frontier model</span>
+      <b>Gemini</b>
+      <span>gemini.google.com</span>
+    </a>
+  </div>
 
-  <section class="resources-section">
-    <div class="section-label">// Quick access</div>
-    <div class="resources-grid">
-      <div class="resource-card">
-        <div class="resource-label">Local AI Server</div>
-        <div class="resource-name">Camp Ollama + WebUI</div>
-        <a class="resource-url" href="http://10.2.128.89:3000" target="_blank">http://10.2.128.89:3000</a>
-      </div>
-      <div class="resource-card">
-        <div class="resource-label">Frontier Model</div>
-        <div class="resource-name">ChatGPT</div>
-        <a class="resource-url" href="https://chat.openai.com" target="_blank">chat.openai.com</a>
-      </div>
-      <div class="resource-card">
-        <div class="resource-label">Frontier Model</div>
-        <div class="resource-name">Claude</div>
-        <a class="resource-url" href="https://claude.ai" target="_blank">claude.ai</a>
-      </div>
-      <div class="resource-card">
-        <div class="resource-label">Frontier Model</div>
-        <div class="resource-name">Gemini</div>
-        <a class="resource-url" href="https://gemini.google.com" target="_blank">gemini.google.com</a>
-      </div>
-    </div>
-  </section>
-</main>
+  <footer>
+    <span>AI &amp; Data Science Camp</span>
+    <span>Alexandria Technical &amp; Community College · Summer 2026</span>
+  </footer>
 
-<footer>
-  AI &amp; Data Science Camp · Alexandria Technical &amp; Community College · Summer 2026
-</footer>
+</div>
 
 <script>
-  const toggle = document.getElementById('themeToggle');
-  const saved = localStorage.getItem('campTheme') || 'dark';
-  if (saved === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-    toggle.textContent = '🌙';
+(function(){
+  var KEY="atcc_camp_theme";
+  var theme = "dark";
+  try{ theme = localStorage.getItem(KEY) || (JSON.parse(localStorage.getItem("atcc_camp_day1_v2")||"{}").theme) || "dark" }catch(e){}
+  var btn = document.getElementById("themeBtn");
+  function apply(){
+    document.documentElement.setAttribute("data-theme", theme);
+    btn.textContent = theme === "dark" ? "☀ light" : "● dark";
   }
-  toggle.addEventListener('click', () => {
-    const current = document.documentElement.getAttribute('data-theme');
-    if (current === 'light') {
-      document.documentElement.removeAttribute('data-theme');
-      toggle.textContent = '☀️';
-      localStorage.setItem('campTheme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      toggle.textContent = '🌙';
-      localStorage.setItem('campTheme', 'light');
-    }
+  btn.addEventListener("click", function(){
+    theme = theme === "dark" ? "light" : "dark";
+    try{ localStorage.setItem(KEY, theme) }catch(e){}
+    apply();
   });
+  apply();
+})();
 </script>
 </body>
 </html>
